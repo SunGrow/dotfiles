@@ -108,9 +108,6 @@ ex ()
 
 ### ALIASES ###
 
-# get your config version controlled
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles.git/ --work-tree=$HOME'
-
 # confirm on overwrite
 alias cp="cp -i"
 alias mv="mv -i"
