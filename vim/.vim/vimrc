@@ -1,0 +1,272 @@
+
+" - General - "
+
+set nocompatible
+set history=500 " Lines for VIM to remember
+set notimeout
+set ttimeout
+
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Set to auto read when a file is changed from the outside
+set autoread
+au CursorHold * checktime
+au FocusGained,BufEnter * checktime
+
+" Set leader key
+nnoremap <SPACE> <Nop>
+let mapleader = " "
+
+" Block shaped cursor
+if exists('$TMUX')
+  let &t_SI = "\ePtmux;\e\e[5 q\e\\"
+  let &t_EI = "\ePtmux;\e\e[2 q\e\\"
+else
+  let &t_SI = "\e[5 q"
+  let &t_EI = "\e[2 q"
+endif
+
+" - UI - "
+
+" Turn off last search highlight
+
+" Clear highlighting on escape in normal mode
+nnoremap <esc><esc> :noh<return>
+
+noremap <leader>c :noh<CR>
+
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+set statusline=
+set statusline+=\ %F%m%r%h\ %w
+set statusline+=Line:\ %l\ \ Column:\ %c
+set statusline+=\ \ CWD:\ %r%{getcwd()}%h\ \ \ 
+
+
+
+" Disable scrollbars (real hackers don't use scrollbars for navigation!)
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L
+
+set so=4 " how many lines from edge before scrolling
+
+" Turn on the Wild menu
+set wildmenu
+
+set cmdheight=2 " height of command bar
+
+set hid " a buffer is hidden when it's abandoned
+
+
+" Configure backspace so it acts as it should act
+" set backspace=eol,start,indent
+" set whichwrap+=<,>,h,l
+
+" Ignore case when searching
+set ignorecase
+
+" When search for capital letter, become case sensetive 
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch 
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw 
+
+" For regular expressions turn magic on
+set magic
+
+" Show matching brackets when text indicator is over them
+set showmatch 
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+" Properly disable sound on errors on MacVim
+if has("gui_macvim")
+    autocmd GUIEnter * set vb t_vb=
+endif
+
+" - Fonts and Colors - "
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+
+" Turn all of the backups off
+set nobackup
+set nowb
+set noswapfile
+
+" - Text - "
+
+" Be smart when using tabs ;)
+set smarttab smartindent
+
+" Formating
+set softtabstop=4 shiftwidth=4 tabstop=4
+
+
+" Linebreak on 500 characters
+set lbr
+set tw=500
+
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+
+" - Visual Mode - "
+
+" Selection Search
+
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
+" - Navigation - "
+
+" Window navigation
+
+map <leader>w <C-W>
+
+" Buffer Control
+
+noremap <leader>bb :buffers<cr>
+
+" Is it possible to pass in the keystroke as a variable to the binding?
+noremap <leader>bd :bd
+
+noremap <leader>bl :bnext<cr>
+noremap <leader>bh :bprevious<cr>
+
+" File Navigation
+
+noremap <leader>e :Ex<cr>
+
+" Tab Navigation
+noremap <leader>tn :tabnew<cr>
+noremap <leader>to :tabonly<cr>
+noremap <leader>tc :tabclose<cr>
+noremap <leader>tm :tabmove
+noremap <leader>t<leader> :tabnext<cr>
+" Let 'tl' toggle between this and the last accessed tab
+let g:lasttab = 1
+nnoremap <Leader>tl :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+noremap <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+" Switch CWD to the directory of the open buffer
+noremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+" Specify the behavior when switching between buffers
+try
+set switchbuf=useopen,usetab,newtab
+set stal=2
+catch
+endtry
+" Return to last edit position when opening files (You want this!)
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Spell checking
+" Pressing <space>ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+" Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+
+" IDE setup
+
+" Syntax highlight
+syntax on
+
+" Set runtime path to only include .vim dir
+let $RTP=split(&runtimepath, ',')[0]
+" Set vimrc source var to .vim/vimrc
+let SRC='$HOME/.vim/.vimrc'
+
+
+" Set path to fin files recursively
+set path=.,**
+
+
+"" Plugins
+
+" Autoinstall plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+" install lsp
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'tikhomirov/vim-glsl'
+Plug 'morhetz/gruvbox'
+call plug#end()
+
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+
+set background=dark
+autocmd vimenter * colorscheme gruvbox
+
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd', '-background-index', '-cross-file-rename', '--clang-tidy', '-compile-commands-dir=build', '-j=8', '-fallback-style="{BasedOnStyle: llvm, IndentWidth: 4, TabWidth: 4, UseTab: ForIndentation}"']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+        \ })
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    let g:lsp_signs_enabled = 1           " enable signs
+    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    let g:lsp_signs_error = {'text': '✗'}
+    let g:lsp_signs_warning = {'text': '‼'}
+    highlight link LspErrorText GruvboxRedSign " requires gruvbox
+    highlight clear LspWarningLine
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nnoremap <buffer> gd :LspDefinition<cr>
+    nnoremap <buffer> gp :LspPeekDefinition<cr>
+    nnoremap <buffer> gr :LspReferences<cr>
+    nnoremap <buffer> gi :LspImplementation<cr>
+    nnoremap <buffer> gt :LspTypeDefinition<cr>
+    nnoremap <buffer> <leader>lr :LspRename<cr>
+    nnoremap <buffer> [g :LspPreviousDiagnostic<cr>
+    nnoremap <buffer> ]g :LspNextDiagnostic<cr>
+    nnoremap <buffer> <leader>fh :LspPreviousError<cr>
+    nnoremap <buffer> <leader>fl :LspNextError<cr>
+    nnoremap <buffer> K :LspHover<cr>
+    nnoremap <buffer> <leader>/ :LspWorkspaceSymbol<cr>
+    " refer to doc to add more commands
+endfunction
+
+augroup LSP | au!
+    autocmd FileType * call s:on_lsp_buffer_enabled()
+augroup END

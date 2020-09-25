@@ -1,0 +1,10 @@
+STEP_SIZE=${STEP_SIZE:-5}
+
+case $BLOCK_BUTTON in
+  4) brightnessctl -q s +"$STEP_SIZE"% ;; # scroll up
+  5) brightnessctl -q s "$STEP_SIZE"%- ;; # scroll down, decrease
+esac
+calc(){ awk "BEGIN { print "$*" }"; }
+BRIGHTNESS=$(brightnessctl g)
+
+echo "$((${BRIGHTNESS}*100/$(brightnessctl m)))%"

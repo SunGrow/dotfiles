@@ -1,0 +1,190 @@
+* {
+    border: none;
+    border-radius: 0;
+    /* `otf-font-awesome` and nerd-fonts-icons are required to be installed for icons */
+    font-family: JetBrains Mono;
+    font-size: 11px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: #63624F;
+    border-bottom: 1px solid #63624F;
+    color: #F4FFFD;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/*
+window#waybar.empty {
+    background-color: transparent;
+}
+window#waybar.solo {
+    background-color: #FFFFFF;
+}
+*/
+
+window#waybar.termite {
+    background-color: #3F3F3F;
+}
+
+window#waybar.chromium {
+    background-color: #000000;
+    border: none;
+}
+
+#workspaces button {
+    padding: 0 1px;
+    background-color: transparent;
+    color: #F4FFFD;
+    border-bottom: 1px solid transparent;
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+#workspaces button:hover {
+    background: rgba(216, 157, 106, 0.4);
+    box-shadow: inherit;
+    border-bottom: 1px solid #260C1A;
+}
+
+#workspaces button.focused {
+    background-color: #D89D6A;
+    color: #260C1A;
+    border-bottom: 1px solid #260C1A;
+}
+
+#workspaces button.urgent {
+    background-color: #FF6666;
+}
+
+#mode {
+    background-color: #64727D;
+    border-bottom: 1px solid #ffffef;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#custom-amdgpu_temp,
+#backlight,
+#network,
+#pulseaudio,
+#custom-media,
+#custom-weather,
+#mode,
+#idle_inhibitor,
+
+
+
+#battery, #battery.charging, #battery.critical:not(.charging), #custom-amdgpu_temp{
+    padding: 0 2px 0 2px;
+    margin: 0 8px 0 8px;
+}
+
+#battery {
+    color: #F4FFFD;
+}
+
+#battery.charging {
+    color: #EDAE49;
+    background-color: #63624F;
+}
+
+@keyframes blink {
+    to {
+    	color: #F4FFFD;
+    }
+}
+
+#battery.critical:not(.charging) {
+    color: #FF6666;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+label:focus {
+    background-color: #000000;
+    color: #F4FFFD;
+}
+
+#cpu {
+    color: #F4FFFD;
+}
+
+#memory {
+    color: #F4FFFD;
+}
+
+#backlight {
+    padding: 0 0px 0 2px;
+    margin: 0 0px 0 8px;
+    color: #F4FFFD;
+}
+
+#network {
+    color: #F4FFFD;
+}
+
+#network.disconnected {
+    color: #f53c3c;
+}
+
+#pulseaudio {
+    color: #F4FFFD;
+}
+
+#pulseaudio.muted {
+    background-color: #559CAD;
+    color: #260C1A;
+    padding: 0 8px 0 8px;
+    margin: 0 8px 0 8px;
+}
+
+#temperature {
+    color: #F4FFFD;
+}
+
+#temperature.critical {
+    color: #FF6666;
+}
+
+#custom-amdgpu_temp {
+}
+
+#tray {
+    background-color: #2980b9;
+}
+
+#idle_inhibitor {
+    background-color: #2d3436;
+}
+
+#idle_inhibitor.activated {
+    background-color: #ecf0f1;
+    color: #2d3436;
+}
+
+#clock, #custom-weather {
+    border-radius: 16px;
+    color: #F4FFFD;
+    background-color: #D89D6A;
+    padding: 0 16px 0 16px;
+}
+
+#clock {
+    margin: 0 -8px 0 8px;
+}
+
+#custom-weather {
+    margin: 0 8px 0 -8px;
+    padding: 2px 16px 0 16px;
+}

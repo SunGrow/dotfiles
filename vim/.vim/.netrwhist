@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/sungrow/Projects/svkr'
+let g:netrw_dirhist_3='/home/sungrow/Projects/svkr/res'
+let g:netrw_dirhist_2='/home/sungrow/Projects/svkr'
+let g:netrw_dirhist_1='/home/sungrow/Projects/svkr/res'
+let g:netrw_dirhist_0='/home/sungrow/Projects/svkr/extern/meshoptimizer/src'
+let g:netrw_dirhist_9='/home/sungrow/Projects/svkr/extern/meshoptimizer'
+let g:netrw_dirhist_8='/home/sungrow/Projects/svkr/extern/meshoptimizer/gltf'
+let g:netrw_dirhist_7='/home/sungrow/Projects/svkr/extern/meshoptimizer'
+let g:netrw_dirhist_6='/home/sungrow/Projects/svkr/extern/meshoptimizer/extern'
+let g:netrw_dirhist_5='/home/sungrow/Projects/svkr/extern/meshoptimizer'

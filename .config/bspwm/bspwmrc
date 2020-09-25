@@ -1,0 +1,33 @@
+#! /bin/sh
+
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+bspc monitor -d 0 1 2 3 4 5 6 7 8 9
+
+bspc config border_width         2
+bspc config window_gap           3
+bspc config right_padding        0
+bspc config legt_padding         0
+bspc config top_padding          -6
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+
+# color
+bspc config focused_border_color \#D89D6A
+bspc config normal_border_color \#333333
+
+# look
+$XDG_CONFIG_HOME/polybar/init.sh
+
+picom &
+
+feh --bg-scale --randomize ~/.wallpaper/* &
+
+# input setup
+
+setxkbmap -layout us,ru -option 'grp:toggle'
+
+xinput set-prop 12 "libinput Natural Scrolling Enabled" 1
