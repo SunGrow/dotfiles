@@ -12,15 +12,14 @@ font pango:mononoki 8
 #Audio controls
 bindsym --to-code $mod+Ctrl+p exec pavucontrol
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status pkill -RTMIN+1 i3blocks
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status && pkill -RTMIN+1 i3blocks
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && pkill -RTMIN+1 i3blocks
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% 
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Use brightnessctl to adjust screen backlight
-bindsym XF86MonBrightnessUp exec brightnessctl -s -q s +5% && pkill -RTMIN+3 i3blocks # increase screen brightness
-bindsym XF86MonBrightnessDown exec brightnessctl -s -q s 5%- && pkill -RTMIN+3 i3blocks # decrease screen brightness
+bindsym XF86MonBrightnessUp exec brightnessctl -s -q s +5%
+bindsym XF86MonBrightnessDown exec brightnessctl -s -q s 5%-
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod

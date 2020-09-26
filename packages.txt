@@ -31,12 +31,9 @@ glfw-x11
 go
 go-tools
 grub
-gst-plugins-good
 htop
 i3-gaps
-i3blocks
 i3lock
-i3status
 libgccjit
 libmad
 libreoffice-fresh
@@ -108,7 +105,6 @@ vulkan-tools
 vulkan-validation-layers
 waybar
 wayland
-webkit2gtk
 wine
 wpa_supplicant
 xclip
