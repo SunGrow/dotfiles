@@ -29,8 +29,8 @@ bindsym $mod+Shift+Return exec st
 
 
 # start rofi (a program launcher)
-#bindsym $mod+d exec rofi -font "mononoki 11.5" -lines 12 -width 33 -location 2 -yoffset 21 -show drun -modi drun -terminal alacritty
-bindsym $mod+p exec dmenu_run -fn "mononoki-10.5"
+bindsym $mod+p exec rofi -show drun
+#bindsym $mod+p exec dmenu_run -fn "mononoki-10.5"
 
 #########################
 #     Window Control	#

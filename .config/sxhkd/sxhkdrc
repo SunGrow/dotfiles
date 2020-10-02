@@ -10,7 +10,8 @@ super + shift + Return
 
 # program launcher
 super + p
-    dmenu_run -fn "mononoki-10.5"
+	rofi -show drun
+    #dmenu_run -fn "mononoki-10.5"
 	#rofi -font "mononoki 11.5" -lines 12 -width 33 -location 2 -yoffset 21 -show    drun -modi drun -terminal st
 
 # make sxhkd reload its configuration files:
