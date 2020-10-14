@@ -8,6 +8,6 @@ Other than the oblivious ones, like fonts, you might want to install git stow (o
 
 fonts: mononoki + JetBrains Mono + siji + SymbolsNerdFont
 
-compositor: picom
+compositor: xcompmgr
 
 terminal: st

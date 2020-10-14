@@ -30,6 +30,7 @@ alert = #bd2c40
 white  = #F4FFFD
 ebony  = #63624F
 black  = #260C1A
+gray1  = #222222
 green  = #9BC53D
 blue   = #4A5899
 cyan   = #559CAD
@@ -48,7 +49,7 @@ height = 18
 radius = 0.0
 fixed-center = true
 
-background = ${colors.ebony}
+background = ${colors.gray1}
 foreground = ${colors.white}
 
 ;line-size = 3
@@ -57,7 +58,7 @@ foreground = ${colors.white}
 border-size = 1
 border-color = ${colors.ebony}
 
-padding-left = 0
+padding-left = 2
 padding-right = 2
 
 module-margin-left = 1
@@ -68,9 +69,9 @@ font-1 = siji:size=10;1
 font-2 = symbolsnerdfont:size=8;2
 
 
-modules-left = memory cpu temperature wlan
+modules-left = wlan memory cpu temperature 
 modules-center = bspwm i3
-modules-right = filesystem backlight-acpi pulseaudio xkeyboard eth battery date powermenu
+modules-right = filesystem backlight-acpi pulseaudio xkeyboard eth battery date
 
 tray-position = right
 tray-padding = 2

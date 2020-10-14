@@ -22,7 +22,7 @@ bspc config normal_border_color \#333333
 # look
 $XDG_CONFIG_HOME/polybar/init.sh
 
-picom &
+xcompmgr -C -c -r 0 &
 
 feh --bg-scale --randomize ~/.wallpaper/* &
 

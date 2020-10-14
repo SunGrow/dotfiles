@@ -10,9 +10,8 @@ super + shift + Return
 
 # program launcher
 super + p
-	rofi -show drun
-    #dmenu_run -fn "mononoki-10.5"
-	#rofi -font "mononoki 11.5" -lines 12 -width 33 -location 2 -yoffset 21 -show    drun -modi drun -terminal st
+    dmenu_run -fn "mononoki-10.5"
+	#rofi -show drun
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -39,7 +38,7 @@ super + y
 	bspc node newest.marked.local -n newest.!automatic.local
 
 # swap the current node and the biggest local window
-super + g
+super + space
 	bspc node -s biggest.window.local
 
 #
@@ -68,7 +67,7 @@ super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
 # focus the node for the given path jump
-super + {p,b,comma,period}
+super + {P,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous window in the current desktop
@@ -151,6 +150,8 @@ Print
 super + Print
     scrot -u ~/screenshots/%Y-%m-%d-%H-%M-%S.png
 
+super + Shift + Print
+    scrot -s -d 2 -c -f ~/screenshots/%Y-%m-%d-%H-%M-%S.png
 
 #
 # session
