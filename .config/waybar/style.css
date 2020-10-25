@@ -8,8 +8,7 @@
 }
 
 window#waybar {
-    background-color: #63624F;
-    border-bottom: 1px solid #63624F;
+    background-color: #32302f;
     color: #F4FFFD;
     transition-property: background-color;
     transition-duration: .5s;
@@ -112,7 +111,7 @@ window#waybar.chromium {
 }
 
 label:focus {
-    background-color: #000000;
+    background-color: #260C1A;
     color: #F4FFFD;
 }
 
@@ -174,17 +173,19 @@ label:focus {
 }
 
 #clock, #custom-weather {
-    border-radius: 16px;
-    color: #F4FFFD;
+    border-radius: 9px;
+    color: #260C1A;
     background-color: #D89D6A;
     padding: 0 16px 0 16px;
+    font-size: 11px;
+    font-family: JetBrains Mono;
 }
 
 #clock {
-    margin: 0 -8px 0 8px;
+    margin: 0 -8px 0 4px;
 }
 
 #custom-weather {
-    margin: 0 8px 0 -8px;
+    margin: 0 8px 0 -4px;
     padding: 2px 16px 0 16px;
 }
