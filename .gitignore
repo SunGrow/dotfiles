@@ -1,2 +1,5 @@
 .git/
 vim/.vim/plugged/
+
+.netrwhist
+.nvimlog
