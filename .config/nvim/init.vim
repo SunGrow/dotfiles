@@ -118,6 +118,7 @@ call plug#end()
 let g:gruvbox_contrast_dark = 'normal'
 colorscheme gruvbox
 set background=dark
+hi Normal guibg=NONE ctermbg=NONE
 
 
 "" LSP
