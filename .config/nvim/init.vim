@@ -54,6 +54,12 @@ set guioptions-=L
 
 set so=4 " how many lines from edge before scrolling
 
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+
+" Ignore case when searching
+set ignorecase
+
 " When search for capital letter, become case sensetive 
 set smartcase
 
@@ -149,5 +155,18 @@ nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<cr>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<cr>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<cr>
 
-nnoremap <silent> <leader>c <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
+nnoremap <silent> <leader>lc <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
+
+"" Text doc editing
+
+" Groff/Troff
+function! CompileGroff()
+	:!groff -ms % -T pdf > /tmp/groff_tmp.pdf
+endfunction
+
+autocmd BufWritePost *.ms :silent call CompileGroff()
+nnoremap <silent> <leader>ti <cmd>:silent call CompileGroff()<cr>
+nnoremap <silent> <leader>to <cmd>:silent !zathura '/tmp/groff_tmp.pdf'&<cr>
+
+
 
