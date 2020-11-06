@@ -118,6 +118,7 @@ call plug#begin(stdpath('data') . '/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
+Plug 'lervag/vimtex'
 call plug#end()
 
 "" Gruvbos theme
@@ -143,30 +144,50 @@ imap <silent> <c-p> <Plug>(completion_trigger)
 lua require('lsp')
 
 " Keybindings
-nnoremap <silent> gd         <cmd>lua vim.lsp.buf.declaration()<cr>
-nnoremap <silent> gD         <cmd>lua vim.lsp.buf.implementation()<cr>
-nnoremap <silent> <leader>lr <cmd>lua vim.lsp.buf.rename()<cr>
-nnoremap <silent> <leader>/  <cmd>lua vim.lsp.buf.workspace_symbol()<cr>
-nnoremap <silent> gr         <cmd>lua vim.lsp.buf.references()<cr>
-nnoremap <silent> K          <cmd>lua vim.lsp.buf.hover()<cr>
+function! s:on_lsp_buffer_enabled() abort
+	nnoremap <buffer> gd         <cmd>lua vim.lsp.buf.declaration()<cr>
+	nnoremap <buffer> gD         <cmd>lua vim.lsp.buf.implementation()<cr>
+	nnoremap <buffer> <leader>lr <cmd>lua vim.lsp.buf.rename()<cr>
+	nnoremap <buffer> <leader>/  <cmd>lua vim.lsp.buf.workspace_symbol()<cr>
+	nnoremap <buffer> gr         <cmd>lua vim.lsp.buf.references()<cr>
+	nnoremap <buffer> K          <cmd>lua vim.lsp.buf.hover()<cr>
+	
+	nnoremap <buffer> <c-]> <cmd>lua vim.lsp.buf.definition()<cr>
+	nnoremap <buffer> <c-k> <cmd>lua vim.lsp.buf.signature_help()<cr>
+	nnoremap <buffer> 1gD   <cmd>lua vim.lsp.buf.type_definition()<cr>
+	nnoremap <buffer> g0    <cmd>lua vim.lsp.buf.document_symbol()<cr>
+	
+	nnoremap <buffer> <leader>lc <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
+endfunction
 
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<cr>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<cr>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<cr>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<cr>
+augroup LSP | au!
+	autocmd FileType * call s:on_lsp_buffer_enabled()
+augroup END
 
-nnoremap <silent> <leader>lc <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
+"" Python
+nnoremap <silent> <leader>bc <cmd>:! python %<cr>
+
 
 "" Text doc editing
 
+" Doc Preview
+nnoremap <silent> <leader>do <cmd>:silent !zathura '/tmp/preview_tmp.pdf'&<cr> 
 " Groff/Troff
 function! CompileGroff()
-	:!groff -ms % -T pdf > /tmp/groff_tmp.pdf
+	:!preconv % | groff -Kutf8 -ms -Tpdf > /tmp/preview_tmp.pdf &
 endfunction
 
 autocmd BufWritePost *.ms :silent call CompileGroff()
-nnoremap <silent> <leader>ti <cmd>:silent call CompileGroff()<cr>
-nnoremap <silent> <leader>to <cmd>:silent !zathura '/tmp/groff_tmp.pdf'&<cr>
 
+" Markdown
+function! CompileMarkdown()
+	:!pandoc % -o /tmp/preview_tmp.pdf --pdf-engine=xelatex -V mainfont="DejaVu Serif" &
+endfunction
 
+autocmd BufWritePost *.md :silent call CompileMarkdown()
 
+" Latex
+let g:tex_flavor = 'latex'
+let g:vimtex_view_method = 'zathura'
+nnoremap <silent> <leader>c <cmd>:VimtexCompile<cr>
+nnoremap <silent> <leader>p <cmd>:VimtexView<cr>

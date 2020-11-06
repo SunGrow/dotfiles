@@ -4,10 +4,16 @@
 
 Other than the oblivious ones, like fonts, you might want to install git stow (or everything from packages.txt with ''' pacman -S --needed $(comm -12 <(pacman -Slq | sort) <(sort packages.txt)) '''
 
-## Visual
+## App stack
 
-fonts: mononoki + JetBrains Mono + siji + SymbolsNerdFont
+Fonts: mononoki + JetBrains Mono + siji + SymbolsNerdFont
 
-compositor: xcompmgr
+Compositor: xcompmgr
 
-terminal: st
+Terminal: st
+
+Image Viewer: sxiv
+
+Background Setter: hsetroot
+
+E-Mail: mutt; offlineimap; msmtp

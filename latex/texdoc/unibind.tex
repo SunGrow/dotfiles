@@ -1,0 +1,56 @@
+\newcommand{\unititle}[9] {
+	\begin{titlepage}
+	\begin{center}
+	  \mdseries
+	  \large Федеральное государственное бюджетное образовательное учреждение
+
+	высшего образования 
+
+	«#1» % Вуз
+	  \vskip.1in
+	  \textsc{\normalsize #2} % Факультет
+	  \vskip.1in
+	  \normalsize #3 % Кафедра
+	  \vskip2.5in
+
+	  \bfseries
+	  \Large #4 % Тип Работы
+	  \par
+	  \Large #5 % Название
+	\end{center}
+	
+	\vskip2.0in
+	
+	\begin{minipage}{.25\textwidth}
+	  \begin{flushleft}
+	    \bfseries\large Принял:\par #6\par #7
+	  \end{flushleft}
+	\end{minipage}
+	\hskip.4\textwidth
+	\begin{minipage}{.25\textwidth}
+	  \begin{flushleft}
+	    \bfseries\large Выполнил:\par #8\par #9
+	  \end{flushleft}
+	\end{minipage}
+
+	\vskip0.5in
+	\hskip.65\textwidth
+	\begin{minipage}{.25\textwidth}
+	  \begin{flushleft}
+	    \bfseries\large Дата: \today
+	  \end{flushleft}
+	\end{minipage}
+	
+	\vfill
+	
+	\centering
+	\bfseries
+	\large г. Калининград
+	\par
+	\large \the\year г.
+	\end{titlepage} 
+}
+
+\newcommand{\klgtu}{Калининградский государственный технический университет}
+\newcommand{\fapu}{Факультет автоматизации производства и управления}
+\newcommand{\suvt}{Кафедра систем управления и вычислительной техники}

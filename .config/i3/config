@@ -222,7 +222,7 @@ exec_always ~/.config/polybar/init.sh
 #       App Init        #
 #########################
 
-exec --no-startup-id feh --bg-scale --randomize ~/.wallpaper/*
+exec --no-startup-id hsetroot -root -cover $(~/.wallpaper/rand.sh)
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
