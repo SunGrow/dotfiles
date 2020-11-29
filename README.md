@@ -17,3 +17,7 @@ Image Viewer: sxiv
 Background Setter: hsetroot
 
 E-Mail: mutt; offlineimap; msmtp
+
+Mixer: pulsemixer
+
+Password: pass && pass-otp

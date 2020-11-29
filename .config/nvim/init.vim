@@ -85,6 +85,9 @@ set t_vb=
 set tm=500
 
 " - Fonts and Colors - "
+" Set gui font
+set guifont=JetBrains\ Mono:h10.5 
+set linespace=4
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
