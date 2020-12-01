@@ -122,6 +122,7 @@ Plug 'morhetz/gruvbox'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'lervag/vimtex'
+Plug 'tikhomirov/vim-glsl'
 call plug#end()
 
 "" Gruvbos theme
@@ -130,6 +131,9 @@ colorscheme gruvbox
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 
+"" GLSL
+
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 "" LSP
 
