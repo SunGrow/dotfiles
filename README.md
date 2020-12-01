@@ -21,3 +21,5 @@ E-Mail: mutt; offlineimap; msmtp
 Mixer: pulsemixer
 
 Password: pass && pass-otp
+
+qt5theming = qt5ct

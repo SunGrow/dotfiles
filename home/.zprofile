@@ -12,5 +12,8 @@ export FILE="nnn"
 
 export GTK3_RC_FILES="${XDG_CONFIG_HOME}/gtk-3.0/gtkrc-3.0"
 
+# Qute theme
+export QT_QPA_PLATFORMTHEME=qt5ct
+
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
