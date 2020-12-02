@@ -165,6 +165,9 @@ function! s:on_lsp_buffer_enabled() abort
 	nnoremap <buffer> g0    <cmd>lua vim.lsp.buf.document_symbol()<cr>
 	
 	nnoremap <buffer> <leader>lc <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
+
+	nnoremap <buffer> <leader>lj <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+	nnoremap <buffer> <leader>lk <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 endfunction
 
 augroup LSP | au!
