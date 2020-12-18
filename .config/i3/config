@@ -230,6 +230,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # Natural scrolling
 exec --no-startup-id xinput set-prop 12 "libinput Natural Scrolling Enabled" 1
+exec --no-startup-id xinput set-prop 13 "libinput Natural Scrolling Enabled" 1
 
 # Layout switch
 exec setxkbmap -layout us,ru -option 'grp:toggle'
