@@ -7,4 +7,8 @@ require'lspconfig'.pyls.setup{
 	on_attach = require'completion'.on_attach; 
 }
 
+require'lspconfig'.zls.setup{
+	on_attach = require'completion'.on_attach; 
+}
+
 
