@@ -128,6 +128,7 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'lervag/vimtex'
 Plug 'tikhomirov/vim-glsl'
 Plug 'ziglang/zig.vim'
+Plug 'ap/vim-css-color'
 call plug#end()
 
 "" Gruvbos theme
