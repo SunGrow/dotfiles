@@ -32,3 +32,5 @@ hsetroot -root -cover $(~/.wallpaper/rand.sh)
 setxkbmap -layout us,ru -option 'grp:toggle'
 
 xinput set-prop 12 "libinput Natural Scrolling Enabled" 1
+xinput set-prop 13 "libinput Natural Scrolling Enabled" 1
+

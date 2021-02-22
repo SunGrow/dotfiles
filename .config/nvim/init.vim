@@ -129,6 +129,7 @@ Plug 'lervag/vimtex'
 Plug 'tikhomirov/vim-glsl'
 Plug 'ziglang/zig.vim'
 Plug 'ap/vim-css-color'
+Plug 'nvim-lua/lsp-status.nvim'
 call plug#end()
 
 "" Gruvbos theme
@@ -176,9 +177,23 @@ function! s:on_lsp_buffer_enabled() abort
 	nnoremap <buffer> <leader>lk <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 endfunction
 
+autocmd CursorHold *.* :lua vim.lsp.diagnostic.show_line_diagnostics()
+set updatetime=1000
+
 augroup LSP | au!
 	autocmd FileType * call s:on_lsp_buffer_enabled()
 augroup END
+
+"" LspStatus
+
+function! LspStatus() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+  return ''
+endfunction
+
+set statusline+=\ %{LspStatus()}
 
 "" Python
 nnoremap <silent> <leader>bc <cmd>:! python %<cr>

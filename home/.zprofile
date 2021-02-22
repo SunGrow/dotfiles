@@ -4,7 +4,7 @@
 
 export EDITOR="nvim"
 export TERMINAL="st"
-export BROWSER="elinks"
+export BROWSER="firefox"
 export READER="zathura"
 export FILE="nnn"
 
