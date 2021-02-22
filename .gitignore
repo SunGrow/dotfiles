@@ -3,3 +3,5 @@ vim/.vim/plugged/
 
 .netrwhist
 .nvimlog
+.config/nvim/.netrwhist
+.config/nvim/.nvimlog
