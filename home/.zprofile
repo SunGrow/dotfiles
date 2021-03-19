@@ -17,3 +17,4 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
+

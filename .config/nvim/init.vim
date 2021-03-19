@@ -193,7 +193,12 @@ function! LspStatus() abort
   return ''
 endfunction
 
+set statusline+=\ line:
+set statusline+=\ %l
+set statusline+=\ \|
+set statusline+=\ status:
 set statusline+=\ %{LspStatus()}
+set statusline+=\ \|
 
 "" Python
 nnoremap <silent> <leader>bc <cmd>:! python %<cr>

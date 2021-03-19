@@ -6,13 +6,19 @@ local lspcompletion = require('completion')
 
 lsp_status.config({
 	status_symbol = '',
-	indicator_errors = 'e',
-	indicator_warnings = 'w',
+	indicator_errors = 'E:',
+	indicator_warnings = 'W:',
 	indicator_info = 'i',
 	indicator_hint = 'h',
 	indicator_ok = '✔️',
 	spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
 })
+
+local on_attach = function(_, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	lspcompletion.on_attach()
+	lsp_status.on_attach(_)
+end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -24,23 +30,23 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-require'lspconfig'.clangd.setup{
+lspconfig.clangd.setup{
 	cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
 	handlers = lsp_status.extensions.clangd.setup();
 	init_options = {
     clangdFileStatus = true
 	};
-	on_attach = lsp_status.on_attach; 
+	on_attach = on_attach; 
 	capabilities = lsp_status.capabilities;
 };
 
-require'lspconfig'.pyls.setup{
-	on_attach = lsp_status.on_attach; 
+lspconfig.pyls.setup{
+	on_attach = on_attach; 
 	capabilities = lsp_status.capabilities;
 }
 
-require'lspconfig'.zls.setup{
-	on_attach = lsp_status.on_attach; 
+lspconfig.zls.setup{
+	on_attach = on_attach; 
 	capabilities = lsp_status.capabilities;
 }
 

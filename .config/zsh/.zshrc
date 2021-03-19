@@ -121,3 +121,5 @@ alias lynx="lynx -vikeys -cfg=$XDG_CONFIG_HOME/lynx/lynx.cfg"
 ## BIND
 #
 export STEAM_COMPAT_DATA_PATH="~/proton"
+
+export PATH=~/.local/bin:$PATH
