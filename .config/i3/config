@@ -236,5 +236,5 @@ exec --no-startup-id xinput set-prop 13 "libinput Natural Scrolling Enabled" 1
 exec setxkbmap -layout us,ru -option 'grp:toggle'
 
 # Compositor
-exec --no-startup-id xcompmgr &
-#exec --no-startup-id picom &
+#exec --no-startup-id xcompmgr &
+exec --no-startup-id picom &

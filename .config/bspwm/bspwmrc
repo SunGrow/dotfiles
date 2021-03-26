@@ -22,8 +22,8 @@ bspc config normal_border_color \#333333
 # look
 $XDG_CONFIG_HOME/polybar/init.sh
 
-#picom &
-xcompmgr &
+picom &
+#xcompmgr &
 
 hsetroot -root -cover $(~/.wallpaper/rand.sh)
 

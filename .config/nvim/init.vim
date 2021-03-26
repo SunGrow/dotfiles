@@ -127,6 +127,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'lervag/vimtex'
 Plug 'tikhomirov/vim-glsl'
+Plug 'sheerun/vim-polyglot'
 Plug 'ziglang/zig.vim'
 Plug 'ap/vim-css-color'
 Plug 'nvim-lua/lsp-status.nvim'
@@ -193,6 +194,7 @@ function! LspStatus() abort
   return ''
 endfunction
 
+set statusline=
 set statusline+=\ line:
 set statusline+=\ %l
 set statusline+=\ \|
