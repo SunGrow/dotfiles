@@ -140,7 +140,6 @@ set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 
 "" GLSL
-
 autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 "" LSP
@@ -159,31 +158,7 @@ imap <silent> <c-p> <Plug>(completion_trigger)
 lua require('lsp')
 
 " Keybindings
-function! s:on_lsp_buffer_enabled() abort
-	nnoremap <buffer> gd         <cmd>lua vim.lsp.buf.declaration()<cr>
-	nnoremap <buffer> gD         <cmd>lua vim.lsp.buf.implementation()<cr>
-	nnoremap <buffer> <leader>lr <cmd>lua vim.lsp.buf.rename()<cr>
-	nnoremap <buffer> <leader>/  <cmd>lua vim.lsp.buf.workspace_symbol()<cr>
-	nnoremap <buffer> gr         <cmd>lua vim.lsp.buf.references()<cr>
-	nnoremap <buffer> K          <cmd>lua vim.lsp.buf.hover()<cr>
-	
-	nnoremap <buffer> <c-]> <cmd>lua vim.lsp.buf.definition()<cr>
-	nnoremap <buffer> <c-k> <cmd>lua vim.lsp.buf.signature_help()<cr>
-	nnoremap <buffer> 1gD   <cmd>lua vim.lsp.buf.type_definition()<cr>
-	nnoremap <buffer> g0    <cmd>lua vim.lsp.buf.document_symbol()<cr>
-	
-	nnoremap <buffer> <leader>lc <cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>
-
-	nnoremap <buffer> <leader>lj <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-	nnoremap <buffer> <leader>lk <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-endfunction
-
-autocmd CursorHold *.* :lua vim.lsp.diagnostic.show_line_diagnostics()
 set updatetime=1000
-
-augroup LSP | au!
-	autocmd FileType * call s:on_lsp_buffer_enabled()
-augroup END
 
 "" LspStatus
 

@@ -5,19 +5,80 @@ local lspconfig = require('lspconfig')
 local lspcompletion = require('completion')
 
 lsp_status.config({
-	status_symbol = '',
-	indicator_errors = 'E:',
-	indicator_warnings = 'W:',
-	indicator_info = 'i',
-	indicator_hint = 'h',
-	indicator_ok = '✔️',
-	spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+  status_symbol = '',
+  indicator_errors = 'E:',
+  indicator_warnings = 'W:',
+  indicator_info = 'i',
+  indicator_hint = 'h',
+  indicator_ok = '✔️',
+  spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
 })
 
-local on_attach = function(_, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-	lspcompletion.on_attach()
-	lsp_status.on_attach(_)
+local function preview_location_callback(_, _, result)
+  if result == nil or vim.tbl_isempty(result) then
+    return nil
+  end
+  vim.lsp.util.preview_location(result[1])
+end
+
+function PeekDefinition()
+  local params = vim.lsp.util.make_position_params()
+  return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
+end
+
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  lspcompletion.on_attach()
+  lsp_status.on_attach(client)
+  
+  local opts = { noremap=true, silent=true }
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>d', '<Cmd>lua PeekDefinition()<CR>', opts)
+  buf_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>/', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', 'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<space>sl', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<space>sh', '<cmd>lua vim.lsp.buf.document_highlight()<CR>', opts)
+  buf_set_keymap('n', '<space>lk', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<space>lj', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  
+  buf_set_keymap('n', '<space>lc', '<cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>', opts)
+  
+  -- Set some keybinds conditional on server capabilities
+  if client.resolved_capabilities.document_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  end
+  if client.resolved_capabilities.document_range_formatting then
+    buf_set_keymap("v", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+  end
+  -- Set autocommands conditional on server_capabilities
+  if client.resolved_capabilities.document_highlight then
+    vim.api.nvim_exec([[
+      hi LspReferenceRead  cterm=bold ctermbg=130 guibg=#af5f00
+      hi LspReferenceText  cterm=bold ctermbg=130 guibg=#af5f00
+      hi LspReferenceWrite cterm=bold ctermbg=130 guibg=#af5f00
+      augroup lsp_document_highlight
+        autocmd! * <buffer>
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+      augroup END
+    ]], false)
+  end
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -31,23 +92,23 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 lspconfig.clangd.setup{
-	cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
-	handlers = lsp_status.extensions.clangd.setup();
-	init_options = {
-    clangdFileStatus = true
-	};
-	on_attach = on_attach; 
-	capabilities = lsp_status.capabilities;
+  cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
+  handlers = lsp_status.extensions.clangd.setup();
+  init_options = {
+  clangdFileStatus = true
+  };
+  on_attach = on_attach; 
+  capabilities = lsp_status.capabilities;
 };
 
 lspconfig.pyls.setup{
-	on_attach = on_attach; 
-	capabilities = lsp_status.capabilities;
+  on_attach = on_attach; 
+  capabilities = lsp_status.capabilities;
 }
 
 lspconfig.zls.setup{
-	on_attach = on_attach; 
-	capabilities = lsp_status.capabilities;
+  on_attach = on_attach; 
+  capabilities = lsp_status.capabilities;
 }
 
 
