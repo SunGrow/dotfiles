@@ -21,6 +21,15 @@ local function preview_location_callback(_, _, result)
   vim.lsp.util.preview_location(result[1])
 end
 
+function restartLSP()
+  clients = vim.lsp.get_active_clients() -- client that crashed
+  copy_of_config = clients[1].config
+  vim.lsp.stop_client(clients)
+  
+  new_client_id = vim.lsp.start_client(copy_of_config)
+  vim.lsp.buf_attach_client(0, new_client_id)
+end
+
 function PeekDefinition()
   local params = vim.lsp.util.make_position_params()
   return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
@@ -57,8 +66,9 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<leader>lk', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
   
-  buf_set_keymap('n', '<leader>lc', '<cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<cr>', opts)
+  buf_set_keymap('n', '<leader>lc', '<cmd>lua restartLSP()<cr>', opts)
   
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
