@@ -120,6 +120,7 @@ else
 	endif
 endif
 
+let g:polyglot_disabled = ['glsl']
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'morhetz/gruvbox'
@@ -131,7 +132,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'ziglang/zig.vim'
 Plug 'ap/vim-css-color'
 Plug 'nvim-lua/lsp-status.nvim'
+Plug 'f-person/git-blame.nvim'
 call plug#end()
+
 
 "" Gruvbos theme
 let g:gruvbox_contrast_dark = 'normal'
@@ -204,3 +207,8 @@ let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
 nnoremap <silent> <leader>c <cmd>:VimtexCompile<cr>
 nnoremap <silent> <leader>p <cmd>:VimtexView<cr>
+
+" Blame
+let g:gitblame_enabled = 0
+let g:gitblame_message_template = '  < <summary> • <date> • <author>'
+nnoremap <silent> <leader>B <cmd>GitBlameToggle<CR>
