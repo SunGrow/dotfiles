@@ -6,7 +6,25 @@ local trouble = require('trouble')
 local lualine = require('lualine')
 local lsp_colors = require("lsp-colors")
 local treesitter = require'nvim-treesitter.configs'
-require('lspfuzzy').setup {}
+local lspfuzzy = require('lspfuzzy')
+
+require('bufferline').setup{
+  options = {
+    view = "multiwindow",
+    diagnostics = "nvim_lsp",
+    diagnostics_indicator = function(count, level, diagnostics_dict)
+      local s = " "
+      for e, n in pairs(diagnostics_dict) do
+        local sym = e == "error" and " "
+          or (e == "warning" and " " or "" )
+        s = s .. sym .. n 
+      end
+      return s
+    end
+  },
+}
+
+lspfuzzy.setup {}
 
 treesitter.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages

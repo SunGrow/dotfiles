@@ -30,15 +30,6 @@ nnoremap <leader>tc <cmd>:tabc<cr>
 nnoremap <leader>to <cmd>:tabo<cr>
 nnoremap <leader>tt <cmd>:tabe +term<cr>
 
-" Buffer Control
-
-noremap <leader>bb :buffers<cr>
-
-" Is it possible to pass in the keystroke as a variable to the binding?
-noremap <leader>bd :bd
-
-noremap <leader>bl :bnext<cr>
-noremap <leader>bh :bprevious<cr>
 
 " File Navigation
 
@@ -150,8 +141,22 @@ Plug 'ojroques/nvim-lspfuzzy'
 Plug 'folke/lsp-colors.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'mfussenegger/nvim-dap'
+Plug 'akinsho/nvim-bufferline.lua'
 call plug#end()
 
+" Buffer Control
+
+nnoremap <silent>    <A-p> :BufferLineCyclePrev<CR>
+nnoremap <silent>    <A-n> :BufferLineCycleNext<CR>
+" Re-order to previous/next
+nnoremap <silent>    <A-<> :BufferLineMovePrev<CR>
+nnoremap <silent>    <A->> :BufferLineMoveNext<CR>
+nnoremap <silent>be :BufferLineSortByExtension<CR>
+nnoremap <silent>bd :BufferLineSortByDirectory<CR>
+" Goto buffer in position...
+nnoremap <silent><A-<num>> <cmd>:lua require"bufferline".go_to_buffer(num)<CR>
+nnoremap <silent>    <A-c> :BufferClose<CR>
+nnoremap <silent>    <C-s> :BufferLinePick<CR>
 
 
 "" GLSL
