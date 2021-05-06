@@ -1,6 +1,5 @@
-
 " - General - "
-
+"
 set notimeout
 set ttimeout
 
@@ -131,16 +130,16 @@ Plug 'tikhomirov/vim-glsl'
 Plug 'sheerun/vim-polyglot'
 Plug 'ziglang/zig.vim'
 Plug 'ap/vim-css-color'
-Plug 'nvim-lua/lsp-status.nvim'
 Plug 'f-person/git-blame.nvim'
+Plug 'hoob3rt/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'folke/lsp-trouble.nvim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'folke/lsp-colors.nvim'
 call plug#end()
 
 
-"" Gruvbos theme
-let g:gruvbox_contrast_dark = 'normal'
-colorscheme gruvbox
-set background=dark
-hi Normal guibg=NONE ctermbg=NONE
 
 "" GLSL
 autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
@@ -163,26 +162,8 @@ lua require('lsp')
 " Keybindings
 set updatetime=1000
 
-"" LspStatus
-
-function! LspStatus() abort
-  if luaeval('#vim.lsp.buf_get_clients() > 0')
-    return luaeval("require('lsp-status').status()")
-  endif
-  return ''
-endfunction
-
-set statusline=
-set statusline+=\ line:
-set statusline+=\ %l
-set statusline+=\ \|
-set statusline+=\ status:
-set statusline+=\ %{LspStatus()}
-set statusline+=\ \|
-
 "" Python
 nnoremap <silent> <leader>bc <cmd>:! python %<cr>
-
 
 "" Text doc editing
 
@@ -212,3 +193,5 @@ nnoremap <silent> <leader>p <cmd>:VimtexView<cr>
 let g:gitblame_enabled = 0
 let g:gitblame_message_template = '  < <summary> • <date> • <author>'
 nnoremap <silent> <leader>B <cmd>GitBlameToggle<CR>
+
+"" Gruvbos theme

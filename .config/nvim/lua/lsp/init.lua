@@ -1,18 +1,46 @@
-local lsp_status = require('lsp-status')
-lsp_status.register_progress()
-
 local lspconfig = require('lspconfig')
 local lspcompletion = require('completion')
 
-lsp_status.config({
-  status_symbol = '',
-  indicator_errors = 'E:',
-  indicator_warnings = 'W:',
-  indicator_info = 'i',
-  indicator_hint = 'h',
-  indicator_ok = '✔️',
-  spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' },
+local trouble = require('trouble')
+local lualine = require('lualine')
+local lsp_colors = require("lsp-colors")
+lsp_colors.setup({
+  Error = "#db4b4b",
+  Warning = "#e0af68",
+  Information = "#0db9d7",
+  Hint = "#10B981"
 })
+
+
+lualine.setup{
+  options = {theme = 'gruvbox'},
+  extensions = { 'fzf' },
+  sections = {
+    lualine_a = {{'mode', format=function(mode_name) return mode_name:sub(1,1) end}, },
+    lualine_b = {{'branch'}},
+    lualine_c = {
+      {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+      {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
+    },
+    lualine_x = {{'encoding', 'fileformat', 'filetype'}},
+    lualine_y = {{'diff'}},
+    lualine_z = {{'location'}}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {
+      {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+      {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
+    },
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  }
+}
+
+trouble.setup {
+}
 
 local function preview_location_callback(_, _, result)
   if result == nil or vim.tbl_isempty(result) then
@@ -41,7 +69,6 @@ local on_attach = function(client, bufnr)
   
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   lspcompletion.on_attach()
-  lsp_status.on_attach(client)
   
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -50,7 +77,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<leader>/', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+---  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
@@ -66,6 +93,13 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<leader>lk', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+  buf_set_keymap('n', '<leader>xx', '<cmd>LspTroubleToggle<cr>', opts)
+  buf_set_keymap('n', '<leader>xw', '<cmd>LspTroubleToggle lsp_workspace_diagnostics<cr>', opts)
+  buf_set_keymap('n', '<leader>xd', '<cmd>LspTroubleToggle lsp_document_diagnostics<cr>', opts)
+  buf_set_keymap('n', '<leader>xq', '<cmd>LspTroubleToggle quickfix<cr>', opts)
+  buf_set_keymap('n', '<leader>xl', '<cmd>LspTroubleToggle loclist<cr>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>LspTroubleToggle lsp_references<cr>', opts)
 
   
   buf_set_keymap('n', '<leader>lc', '<cmd>lua restartLSP()<cr>', opts)
@@ -96,29 +130,36 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 	-- Enable underline, use default values
 	underline = true,
   	virtual_text = true,
-  	signs = true,
+    signs = function(bufnr, client_id)
+      local ok, result = pcall(vim.api.nvim_buf_get_var, bufnr, 'show_signs')
+      -- No buffer local variable set, so just enable by default
+      if not ok then
+        return true
+      end
+
+      return result
+    end,
   	update_in_insert = true
   }
 )
 
 lspconfig.clangd.setup{
   cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
-  handlers = lsp_status.extensions.clangd.setup();
-  init_options = {
-  clangdFileStatus = true
-  };
   on_attach = on_attach; 
-  capabilities = lsp_status.capabilities;
 };
 
 lspconfig.pyls.setup{
   on_attach = on_attach; 
-  capabilities = lsp_status.capabilities;
 }
 
 lspconfig.zls.setup{
   on_attach = on_attach; 
-  capabilities = lsp_status.capabilities;
 }
 
-
+--- Gruvbox theme
+vim.cmd[[
+ let g:gruvbox_contrast_dark = 'normal'
+ colorscheme gruvbox
+ set background=dark
+ hi Normal guibg=NONE ctermbg=NONE
+]]
