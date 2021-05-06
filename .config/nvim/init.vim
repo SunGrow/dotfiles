@@ -21,6 +21,14 @@ au FocusGained,BufEnter * checktime
 
 map <leader>w <C-W>
 
+" Tab navigation
+nnoremap <leader>te <cmd>:tabe<cr>
+nnoremap <leader>tf <cmd>:tabf %<cr>
+nnoremap <leader>tn <cmd>:tabn<cr>
+nnoremap <leader>tp <cmd>:tabp<cr>
+nnoremap <leader>tc <cmd>:tabc<cr>
+nnoremap <leader>to <cmd>:tabo<cr>
+
 " Buffer Control
 
 noremap <leader>bb :buffers<cr>
@@ -124,6 +132,7 @@ let g:polyglot_disabled = ['glsl']
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'neovim/nvim-lspconfig'
+Plug 'glepnir/lspsaga.nvim'
 Plug 'nvim-lua/completion-nvim'
 Plug 'lervag/vimtex'
 Plug 'tikhomirov/vim-glsl'
@@ -136,7 +145,10 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'folke/lsp-trouble.nvim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'ojroques/nvim-lspfuzzy'
 Plug 'folke/lsp-colors.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'mfussenegger/nvim-dap'
 call plug#end()
 
 
@@ -193,5 +205,8 @@ nnoremap <silent> <leader>p <cmd>:VimtexView<cr>
 let g:gitblame_enabled = 0
 let g:gitblame_message_template = '  < <summary> • <date> • <author>'
 nnoremap <silent> <leader>B <cmd>GitBlameToggle<CR>
+
+nnoremap <silent> <A-d> <cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>
+tnoremap <silent> <A-d> <C-\><C-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>
 
 "" Gruvbos theme

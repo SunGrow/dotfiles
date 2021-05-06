@@ -1,9 +1,20 @@
 local lspconfig = require('lspconfig')
+local saga = require('lspsaga')
 local lspcompletion = require('completion')
 
 local trouble = require('trouble')
 local lualine = require('lualine')
 local lsp_colors = require("lsp-colors")
+local treesitter = require'nvim-treesitter.configs'
+require('lspfuzzy').setup {}
+
+treesitter.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+
 lsp_colors.setup({
   Error = "#db4b4b",
   Warning = "#e0af68",
@@ -11,6 +22,15 @@ lsp_colors.setup({
   Hint = "#10B981"
 })
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+	-- Enable underline, use default values
+	underline = true,
+  	virtual_text = true,
+    signs = true,
+  	update_in_insert = false
+  }
+)
 
 lualine.setup{
   options = {theme = 'gruvbox'},
@@ -40,7 +60,17 @@ lualine.setup{
 }
 
 trouble.setup {
+  signs = {
+    -- icons / text used for a diagnostic
+    error = "",
+    warning = "",
+    hint = "",
+    information = "",
+    other = "﫠"
+  },
 }
+
+saga.init_lsp_saga()
 
 local function preview_location_callback(_, _, result)
   if result == nil or vim.tbl_isempty(result) then
@@ -71,35 +101,36 @@ local on_attach = function(client, bufnr)
   lspcompletion.on_attach()
   
   local opts = { noremap=true, silent=true }
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>dg', '<Cmd>lua PeekDefinition()<CR>', opts)
-  buf_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>dg', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gd', "<Cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
+  buf_set_keymap('n', '<leader>lr', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
   buf_set_keymap('n', '<leader>/', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
----  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', 'K', "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
+  buf_set_keymap('n', '<C-f>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", opts)
+  buf_set_keymap('n', '<C-b>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", opts)
+  buf_set_keymap('n', 'gr', "<cmd>LspTroubleToggle lsp_references<cr>", opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
   
   buf_set_keymap('n', '<leader>Wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>Wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>Wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   
-  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<leader>sl', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '<leader>sh', '<cmd>lua vim.lsp.buf.document_highlight()<CR>', opts)
-  buf_set_keymap('n', '<leader>lk', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+  buf_set_keymap('n', '<leader>sl', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>", opts)
+  buf_set_keymap('n', '<leader>sh', "<cmd>lua vim.lsp.buf.document_highlight()<CR>", opts)
+  buf_set_keymap('n', '<leader>lk', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
+  buf_set_keymap('n', '<leader>lj', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>", opts)
+  buf_set_keymap('n', '<leader>q',  "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
-  buf_set_keymap('n', '<leader>xx', '<cmd>LspTroubleToggle<cr>', opts)
-  buf_set_keymap('n', '<leader>xw', '<cmd>LspTroubleToggle lsp_workspace_diagnostics<cr>', opts)
-  buf_set_keymap('n', '<leader>xd', '<cmd>LspTroubleToggle lsp_document_diagnostics<cr>', opts)
-  buf_set_keymap('n', '<leader>xq', '<cmd>LspTroubleToggle quickfix<cr>', opts)
-  buf_set_keymap('n', '<leader>xl', '<cmd>LspTroubleToggle loclist<cr>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>LspTroubleToggle lsp_references<cr>', opts)
+  buf_set_keymap('n', '<leader>xx', "<cmd>LspTroubleToggle<cr>", opts)
+  buf_set_keymap('n', '<leader>xw', "<cmd>LspTroubleToggle lsp_workspace_diagnostics<cr>", opts)
+  buf_set_keymap('n', '<leader>xd', "<cmd>LspTroubleToggle lsp_document_diagnostics<cr>", opts)
+  buf_set_keymap('n', '<leader>xq', "<cmd>LspTroubleToggle quickfix<cr>", opts)
+  buf_set_keymap('n', '<leader>xl', "<cmd>LspTroubleToggle loclist<cr>", opts)
 
   
   buf_set_keymap('n', '<leader>lc', '<cmd>lua restartLSP()<cr>', opts)
@@ -124,24 +155,6 @@ local on_attach = function(client, bufnr)
     ]], false)
   end
 end
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-	-- Enable underline, use default values
-	underline = true,
-  	virtual_text = true,
-    signs = function(bufnr, client_id)
-      local ok, result = pcall(vim.api.nvim_buf_get_var, bufnr, 'show_signs')
-      -- No buffer local variable set, so just enable by default
-      if not ok then
-        return true
-      end
-
-      return result
-    end,
-  	update_in_insert = true
-  }
-)
 
 lspconfig.clangd.setup{
   cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
