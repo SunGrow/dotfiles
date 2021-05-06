@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =0
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/sungrow/gitclone/neovim/.builds'
+let g:netrw_dirhist_1='/home/sungrow/gitclone/neovim'
 let g:netrw_dirhist_0='/home/sungrow/Projects/sage/src/rend'
 let g:netrw_dirhist_9='/home/sungrow/Projects/sage/src'
 let g:netrw_dirhist_8='/home/sungrow/Projects/sage'
@@ -8,5 +10,3 @@ let g:netrw_dirhist_6='/home/sungrow'
 let g:netrw_dirhist_5='/home/sungrow/Documents'
 let g:netrw_dirhist_4='/home/sungrow/Documents/uni'
 let g:netrw_dirhist_3='/home/sungrow/Documents'
-let g:netrw_dirhist_2='/home/sungrow'
-let g:netrw_dirhist_1='/home/sungrow/gitclone/godot'

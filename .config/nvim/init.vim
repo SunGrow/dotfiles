@@ -28,6 +28,7 @@ nnoremap <leader>tn <cmd>:tabn<cr>
 nnoremap <leader>tp <cmd>:tabp<cr>
 nnoremap <leader>tc <cmd>:tabc<cr>
 nnoremap <leader>to <cmd>:tabo<cr>
+nnoremap <leader>tt <cmd>:tabe +term<cr>
 
 " Buffer Control
 
@@ -208,5 +209,6 @@ nnoremap <silent> <leader>B <cmd>GitBlameToggle<CR>
 
 nnoremap <silent> <A-d> <cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>
 tnoremap <silent> <A-d> <C-\><C-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>
+tnoremap <silent> <C-[><C-[> <C-\><C-n>
 
 "" Gruvbos theme
