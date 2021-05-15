@@ -1,2 +1,2 @@
 cd $(dirname "$0")
-ls -d $PWD/* | grep -v "$0"| sort -R | head -1
+ls -d $PWD/* | grep -v "$0"| grep $1 | sort -R | head -1

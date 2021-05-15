@@ -146,16 +146,16 @@ call plug#end()
 
 " Buffer Control
 
-nnoremap <silent>    <A-p> :BufferLineCyclePrev<CR>
-nnoremap <silent>    <A-n> :BufferLineCycleNext<CR>
+nnoremap <silent>    <A-,> :BufferLineCyclePrev<CR>
+nnoremap <silent>    <A-.> :BufferLineCycleNext<CR>
 " Re-order to previous/next
 nnoremap <silent>    <A-<> :BufferLineMovePrev<CR>
 nnoremap <silent>    <A->> :BufferLineMoveNext<CR>
-nnoremap <silent>be :BufferLineSortByExtension<CR>
-nnoremap <silent>bd :BufferLineSortByDirectory<CR>
+nnoremap <silent><leader>be :BufferLineSortByExtension<CR>
+nnoremap <silent><leader>bd :BufferLineSortByDirectory<CR>
 " Goto buffer in position...
 nnoremap <silent><A-<num>> <cmd>:lua require"bufferline".go_to_buffer(num)<CR>
-nnoremap <silent>    <A-c> :BufferClose<CR>
+nnoremap <silent>    <A-c> :bd<CR>
 nnoremap <silent>    <C-s> :BufferLinePick<CR>
 
 

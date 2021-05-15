@@ -25,7 +25,9 @@ $XDG_CONFIG_HOME/polybar/init.sh
 picom &
 #xcompmgr &
 
-hsetroot -root -cover $(~/.wallpaper/rand.sh)
+xss-lock -- i3lock -n -i $(~/.wallpaper/rand.sh .png) &
+
+hsetroot -root -cover $(~/.wallpaper/rand.sh .)
 
 # input setup
 
@@ -33,4 +35,5 @@ setxkbmap -layout us,ru -option 'grp:toggle'
 
 xinput set-prop 12 "libinput Natural Scrolling Enabled" 1
 xinput set-prop 13 "libinput Natural Scrolling Enabled" 1
+xinput set-prop 14 "libinput Natural Scrolling Enabled" 1
 
