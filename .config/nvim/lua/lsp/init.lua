@@ -1,4 +1,5 @@
 local lspconfig = require('lspconfig')
+local lspinstall = require('lspinstall')
 local saga = require('lspsaga')
 local lspcompletion = require('completion')
 
@@ -7,6 +8,8 @@ local lualine = require('lualine')
 local lsp_colors = require("lsp-colors")
 local treesitter = require'nvim-treesitter.configs'
 local lspfuzzy = require('lspfuzzy')
+
+require('nvim-ale-diagnostic')
 
 require('bufferline').setup{
   options = {
@@ -51,7 +54,11 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 lualine.setup{
-  options = {theme = 'gruvbox'},
+  options = {
+    theme = 'gruvbox',
+    section_separators = {'', ''},
+    component_separators = {'', ''}
+  },
   extensions = { 'fzf' },
   sections = {
     lualine_a = {{'mode', format=function(mode_name) return mode_name:sub(1,1) end}, },
@@ -97,12 +104,11 @@ local function preview_location_callback(_, _, result)
   vim.lsp.util.preview_location(result[1])
 end
 
-function restartLSP()
-  clients = vim.lsp.get_active_clients() -- client that crashed
-  copy_of_config = clients[1].config
+function RestartLSP()
+  local clients = vim.lsp.get_active_clients() -- client that crashed
+  local copy_of_config = clients[1].config
   vim.lsp.stop_client(clients)
-  
-  new_client_id = vim.lsp.start_client(copy_of_config)
+  local new_client_id = vim.lsp.start_client(copy_of_config)
   vim.lsp.buf_attach_client(0, new_client_id)
 end
 
@@ -174,18 +180,73 @@ local on_attach = function(client, bufnr)
   end
 end
 
-lspconfig.clangd.setup{
-  cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
-  on_attach = on_attach; 
-};
+lspinstall.setup()
 
-lspconfig.pyls.setup{
-  on_attach = on_attach; 
+-- Configure lua language server for neovim development
+local lua_settings = {
+  Lua = {
+    runtime = {
+      -- LuaJIT in the case of Neovim
+      version = 'LuaJIT',
+      path = vim.split(package.path, ';'),
+    },
+    diagnostics = {
+      -- Get the language server to recognize the `vim` global
+      globals = {'vim'},
+    },
+    workspace = {
+      -- Make the server aware of Neovim runtime files
+      library = {
+        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+      },
+    },
+  }
 }
 
-lspconfig.zls.setup{
-  on_attach = on_attach; 
-}
+local function make_config()
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  return {
+    -- enable snippet support
+    capabilities = capabilities,
+    -- map buffer local keybindings when the language server attaches
+    on_attach = on_attach,
+  }
+end
+
+local function setup_servers()
+  lspinstall.setup()
+  local servers = lspinstall.installed_servers()
+  table.insert(servers, "clangd")
+  table.insert(servers, "zls")
+
+  for _, server in pairs(servers) do
+    local config = make_config()
+    if server == "clangd" then
+      config.cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
+    end
+
+    if server == "lua" then
+      config.settings = lua_settings
+    end
+
+    local pid = vim.fn.getpid()
+    if server == "csharp" then
+      config.init_options = {"--languageserver" , "--hostPID", tostring(pid), "msbuild:enabled:true"}
+    end
+
+    lspconfig[server].setup(config)
+  end
+end
+
+setup_servers()
+
+-- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+lspinstall.post_install_hook = function ()
+  setup_servers() -- reload installed servers
+  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+end
 
 --- Gruvbox theme
 vim.cmd[[

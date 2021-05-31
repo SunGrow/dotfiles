@@ -18,7 +18,7 @@ Background Setter: hsetroot
 
 E-Mail: mutt; offlineimap; msmtp
 
-Mixer: pulsemixer
+Mixer: pulsemixer, pavucontrol
 
 Password: pass && pass-otp
 

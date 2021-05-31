@@ -142,6 +142,12 @@ Plug 'folke/lsp-colors.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'mfussenegger/nvim-dap'
 Plug 'akinsho/nvim-bufferline.lua'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'dense-analysis/ale'
+Plug 'nathunsmitty/nvim-ale-diagnostic'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'SirVer/ultisnips'
 call plug#end()
 
 " Buffer Control
@@ -169,6 +175,10 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
 set completeopt=menuone,noinsert,noselect
+set completeopt-=preview
+
+"set completeopt=menuone,noinsert,noselect,popuphidden
+"set completepopup=highlight:Pmenu,border:off
 
 autocmd BufEnter * lua require'completion'.on_attach()
 
@@ -219,7 +229,7 @@ tnoremap <silent> <C-[><C-[> <C-\><C-n>
 " Large files
 
 augroup LargeFile
-        let g:large_file = 10485760 " 10MB
+        let g:large_file = 10485760
 
         " Set options:
         "   eventignore+=FileType (no syntax highlighting etc
@@ -237,4 +247,59 @@ augroup LargeFile
                         \ set eventignore-=FileType |
                 \ endif
 augroup END
+
+let g:ale_linters = {
+\ 'cs': ['OmniSharp']
+\}
+let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
+let g:OmniSharp_selector_findusages = 'fzf'
+let g:OmniSharp_want_snippet=1
+let g:OmniSharp_popup_options = {
+  \ 'winhl': 'Normal:NormalFloat'
+  \}
+
+
+augroup omnisharp_commands
+  autocmd!
+
+  " Show type information automatically when the cursor stops moving.
+  " Note that the type is echoed to the Vim command line, and will overwrite
+  " any other messages in this space including e.g. ALE linting messages.
+  autocmd CursorHold *.cs OmniSharpTypeLookup
+
+  " The following commands are contextual, based on the cursor position.
+  autocmd FileType cs nmap <silent> <buffer> gD <Plug>(omnisharp_go_to_definition)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>gr <Plug>(omnisharp_find_usages)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lfi <Plug>(omnisharp_find_implementations)
+  autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_preview_definition)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lpi <Plug>(omnisharp_preview_implementations)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lt <Plug>(omnisharp_type_lookup)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>ld <Plug>(omnisharp_documentation)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lfs <Plug>(omnisharp_find_symbol)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lfx <Plug>(omnisharp_fix_usings)
+  autocmd FileType cs nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+  autocmd FileType cs imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+
+  " Navigate up and down by method/property/field
+  autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
+  autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
+  " Find all code errors/warnings for the current solution and populate the quickfix window
+  autocmd FileType cs nmap <silent> <buffer> <Leader>cc <Plug>(omnisharp_global_code_check)
+  " Contextual code actions (uses fzf, vim-clap, CtrlP or unite.vim selector when available)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
+  autocmd FileType cs xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
+  " Repeat the last code action performed (does not use a selector)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>l. <Plug>(omnisharp_code_action_repeat)
+  autocmd FileType cs xmap <silent> <buffer> <Leader>l. <Plug>(omnisharp_code_action_repeat)
+
+  autocmd FileType cs nmap <silent> <buffer> <Leader>l= <Plug>(omnisharp_code_format)
+
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lr <Plug>(omnisharp_rename)
+
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lsr <Plug>(omnisharp_restart_server)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lst <Plug>(omnisharp_start_server)
+  autocmd FileType cs nmap <silent> <buffer> <Leader>lsp <Plug>(omnisharp_stop_server)
+augroup END
+
+
 
