@@ -115,6 +115,7 @@ alias mv="mv -i"
 # add flags for convenience
 alias ls="ls -A --color -h -s --group-directories-first"
 alias df="df -h"
+alias du="du -h --max-depth=1 | sort -hr"
 alias free="free -h"
 alias lynx="lynx -vikeys -cfg=$XDG_CONFIG_HOME/lynx/lynx.cfg"
 

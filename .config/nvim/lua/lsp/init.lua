@@ -64,7 +64,7 @@ lualine.setup{
     lualine_a = {{'mode', format=function(mode_name) return mode_name:sub(1,1) end}, },
     lualine_b = {{'branch'}},
     lualine_c = {
-      {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+      {'filename', condition=function() return vim.fn.winwidth(0) > 50 end},
       {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
     },
     lualine_x = {{'encoding', 'fileformat', 'filetype'}},
@@ -75,7 +75,7 @@ lualine.setup{
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
-      {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+      {'filename', condition=function() return vim.fn.winwidth(0) > 50 end},
       {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
     },
     lualine_x = {'location'},
