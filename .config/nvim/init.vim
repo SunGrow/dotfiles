@@ -148,6 +148,7 @@ Plug 'dense-analysis/ale'
 Plug 'nathunsmitty/nvim-ale-diagnostic'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'SirVer/ultisnips'
+Plug 'drichardson/vim-unreal'
 call plug#end()
 
 " Buffer Control
