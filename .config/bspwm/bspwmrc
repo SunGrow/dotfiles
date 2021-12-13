@@ -24,10 +24,12 @@ $XDG_CONFIG_HOME/polybar/init.sh
 
 picom &
 #xcompmgr &
+dunst&
 
-xss-lock -- i3lock -n -i $(~/.wallpaper/rand.sh .png) &
+#xss-lock -- i3lock -n -i $(~/.wallpaper/rand.sh .png) &
 
-hsetroot -root -cover $(~/.wallpaper/rand.sh .)
+#hsetroot -root -cover $(~/.wallpaper/rand.sh .)
+betterlockscreen --fx color -u $(~/.wallpaper/rand.sh .) -w
 
 # input setup
 

@@ -6,10 +6,13 @@
 super + shift + Return
 	$TERMINAL&!
 
+super + i
+	thunar
+
 # program launcher
 super + p
-    dmenu_run -fn "mononoki-10.5"
-	#rofi -show drun
+	rofi -show drun
+#    dmenu_run -fn "mononoki-10.5"
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -143,13 +146,23 @@ XF86AudioMicMute
     pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 Print
-    scrot ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+	flameshot screen ~/screenshots/
+#    scrot ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+
+#super + Print
+#    scrot -u ~/screenshots/%Y-%m-%d-%H-%M-%S.png
 
 super + Print
-    scrot -u ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+	flameshot gui -p ~/screenshots/
 
-super + Shift + Print
-    scrot -s -d 2 -c -f ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+super + shift + s
+	flameshot gui -p ~/screenshots/
+
+#super + shift + Print
+#    scrot -s -d 2 -c -f ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+
+alt + shift + x
+    betterlockscreen -l
 
 #
 # session

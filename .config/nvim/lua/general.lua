@@ -1,20 +1,89 @@
-local lspconfig = require('lspconfig')
-local lspinstall = require('lspinstall')
-local saga = require('lspsaga')
-local lspcompletion = require('completion')
+-- Basic settings
+vim.o.encoding = "utf-8"
+vim.o.backspace = "indent,eol,start" -- backspace works on every char in insert mode
+vim.o.completeopt = 'menuone,noinsert,noselect'
+vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
+vim.o.history = 1000
+vim.o.laststatus = 2
+vim.g.mapleader = ' ' -- Set leader key
+vim.o.so = 4 -- How many lines from edge before scrolling
 
-local trouble = require('trouble')
-local lualine = require('lualine')
+-- Enable filetype plugins
+vim.cmd('filetype plugin on')
+vim.cmd('filetype indent on')
+-- Set to auto read when a file is changed from the outside
+vim.g.autoread = true 
+vim.cmd('au CursorHold * checktime')
+vim.cmd('au FocusGained,BufEnter * checktime')
+
+vim.cmd[[
+augroup LargeFile
+        let g:large_file = 10485760
+
+        " Set options:
+        "   eventignore+=FileType (no syntax highlighting etc
+        "   assumes FileType always on)
+        "   noswapfile (save copy of file)
+        "   bufhidden=unload (save memory when other file is viewed)
+        "   buftype=nowritefile (is read-only)
+        "   undolevels=-1 (no undo possible)
+        au BufReadPre *
+                \ let f=expand("<afile>") |
+                \ if getfsize(f) > g:large_file |
+                        \ set eventignore+=FileType |
+                        \ setlocal noswapfile bufhidden=unload buftype=nowrite undolevels=-1 |
+                \ else |
+                        \ set eventignore-=FileType |
+                \ endif
+augroup END
+]]
+
+vim.o.ignorecase = true -- Ignore case when searching
+vim.o.smartcase = true -- When search for capital letter, become case sensetive
+vim.o.hlsearch = true -- Highlight search results
+vim.o.incsearch = true -- Makes search act like search in modern browsers
+vim.g.lazyredraw = true -- Don't redraw while executing macros (good performance config)
+vim.g.magic = true -- For regular expressions turn magic on
+vim.g.showmatch = true -- Show matching brackets when text indicator is over them
+-- No annoying sound on errors
+vim.g.errorbells = false
+vim.g.visualbell = false
+vim.g.t_vb = ''
+vim.g.tm=500
+-- GUI
+--vim.g.guioptions-=r
+--vim.g.guioptions-=R
+--vim.g.guioptions-=l
+--vim.g.guioptions-=L
+
+
+-- Mapping waiting time
+vim.o.timeout = false
+vim.o.ttimeout = true
+vim.o.ttimeoutlen = 100
+
+-- Theme
+vim.g.gruvbox_contrast_dark = 'normal'
+vim.o.background = 'dark'
+vim.cmd('colorscheme gruvbox')
+vim.g.guifont = 'JetBrains Mono:h10.5'
+vim.o.linespace = 4
+
 local lsp_colors = require("lsp-colors")
-local treesitter = require'nvim-treesitter.configs'
-local lspfuzzy = require('lspfuzzy')
 
-require('nvim-ale-diagnostic')
+lsp_colors.setup({
+  Error = "#db4b4b",
+  Warning = "#e0af68",
+  Information = "#0db9d7",
+  Hint = "#10B981"
+})
+
+local lualine = require('lualine')
 
 require('bufferline').setup{
   options = {
     view = "multiwindow",
-    diagnostics = "nvim_lsp",
+    diagnostics = "nvim_diagnostic",
     diagnostics_indicator = function(count, level, diagnostics_dict)
       local s = " "
       for e, n in pairs(diagnostics_dict) do
@@ -26,32 +95,6 @@ require('bufferline').setup{
     end
   },
 }
-
-lspfuzzy.setup {}
-
-treesitter.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-  },
-}
-
-lsp_colors.setup({
-  Error = "#db4b4b",
-  Warning = "#e0af68",
-  Information = "#0db9d7",
-  Hint = "#10B981"
-})
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-	-- Enable underline, use default values
-	underline = true,
-  	virtual_text = true,
-    signs = true,
-  	update_in_insert = false
-  }
-)
 
 lualine.setup{
   options = {
@@ -65,7 +108,7 @@ lualine.setup{
     lualine_b = {{'branch'}},
     lualine_c = {
       {'filename', condition=function() return vim.fn.winwidth(0) > 50 end},
-      {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
+      {'diagnostics', sources={'nvim_diagnostic'}, condition=function() return vim.fn.winwidth(0) > 80 end}
     },
     lualine_x = {{'encoding', 'fileformat', 'filetype'}},
     lualine_y = {{'diff'}},
@@ -76,7 +119,7 @@ lualine.setup{
     lualine_b = {},
     lualine_c = {
       {'filename', condition=function() return vim.fn.winwidth(0) > 50 end},
-      {'diagnostics', sources={'nvim_lsp'}, condition=function() return vim.fn.winwidth(0) > 80 end}
+      {'diagnostics', sources={'nvim_diagnostic'}, condition=function() return vim.fn.winwidth(0) > 80 end}
     },
     lualine_x = {'location'},
     lualine_y = {},
@@ -84,6 +127,46 @@ lualine.setup{
   }
 }
 
+
+-- Formating
+vim.g.softtabstop = 4
+vim.g.hiftwidth = 4
+vim.g.abstop = 4
+vim.cmd('syntax on')
+
+-- Latex
+vim.g.tex_flavor = 'latex'
+vim.g.vimtex_view_method = 'zathura'
+
+-- Diagnostics
+
+lspconfig = require('lspconfig')
+lspinstall = require('nvim-lsp-installer')
+
+
+lspfuzzy = require('lspfuzzy')
+lspfuzzy.setup {}
+
+
+treesitter = require('nvim-treesitter.configs')
+treesitter.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+	-- Enable underline, use default values
+	underline = true,
+  	virtual_text = true,
+        signs = true,
+  	update_in_insert = false
+  }
+)
+
+trouble = require('trouble')
 trouble.setup {
   signs = {
     -- icons / text used for a diagnostic
@@ -95,7 +178,7 @@ trouble.setup {
   },
 }
 
-saga.init_lsp_saga()
+--- Unfiltered mess below
 
 local function preview_location_callback(_, _, result)
   if result == nil or vim.tbl_isempty(result) then
@@ -117,13 +200,32 @@ function PeekDefinition()
   return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
 end
 
-local on_attach = function(client, bufnr)
+-- Configure lua language server for neovim development
+local lua_settings = {
+  Lua = {
+    runtime = {
+      -- LuaJIT in the case of Neovim
+      version = 'LuaJIT',
+      path = vim.split(package.path, ';'),
+    },
+    diagnostics = {
+      -- Get the language server to recognize the `vim` global
+      globals = {'vim'},
+    },
+    workspace = {
+      -- Make the server aware of Neovim runtime files
+      library = {
+        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+      },
+    },
+  }
+}
+
+local LspOnAttach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-  
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  lspcompletion.on_attach()
-  
+--  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', '<leader>dg', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
@@ -180,78 +282,54 @@ local on_attach = function(client, bufnr)
   end
 end
 
-lspinstall.setup()
-
--- Configure lua language server for neovim development
-local lua_settings = {
-  Lua = {
-    runtime = {
-      -- LuaJIT in the case of Neovim
-      version = 'LuaJIT',
-      path = vim.split(package.path, ';'),
-    },
-    diagnostics = {
-      -- Get the language server to recognize the `vim` global
-      globals = {'vim'},
-    },
-    workspace = {
-      -- Make the server aware of Neovim runtime files
-      library = {
-        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-      },
-    },
-  }
-}
+local configs = require('lspconfig/configs')
+local util = require('lspconfig/util')
+local completion = require('cmp_nvim_lsp')
 
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
+  capabilities = completion.update_capabilities(capabilities)
   return {
     -- enable snippet support
     capabilities = capabilities,
     -- map buffer local keybindings when the language server attaches
-    on_attach = on_attach,
+    	on_attach = LspOnAttach,
+	root_dir = util.root_pattern(".git") or vim.loop.os_homedir()
   }
 end
 
-local function setup_servers()
-  lspinstall.setup()
-  local servers = lspinstall.installed_servers()
-  table.insert(servers, "clangd")
-  table.insert(servers, "zls")
-
-  for _, server in pairs(servers) do
-    local config = make_config()
-    if server == "clangd" then
-      config.cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
+lspinstall.on_server_ready(function(server)
+    local opts = make_config()
+    if server.name == "clangd" then
+	opts.cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
+	opts.root_dir = util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.loop.os_homedir()
     end
-
-    if server == "lua" then
+    if server.name == "zls" then
+    end
+    if server.name == "lua" then
       config.settings = lua_settings
     end
+    server:setup(opts)
+end)
 
-    local pid = vim.fn.getpid()
-    if server == "csharp" then
-      config.init_options = {"--languageserver" , "--hostPID", tostring(pid), "msbuild:enabled:true"}
-    end
+saga = require('lspsaga')
+saga.init_lsp_saga()
 
-    lspconfig[server].setup(config)
-  end
-end
-
-setup_servers()
+--lsp_installer_servers = require('nvim-lsp-installer.servers')
+--
+--local server_available, requested_server = lsp_installer_servers.get_server("clangd")
+--local server_available, requested_server = lsp_installer_servers.get_server("zls")
+--if server_available then
+--    requested_server:on_ready(function ()
+--        local opts = {}
+--        requested_server:setup(opts)
+--    end)
+--    if not requested_server:is_installed() then
+--        -- Queue the server to be installed
+--        requested_server:install()
+--    end
+--end
 
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-lspinstall.post_install_hook = function ()
-  setup_servers() -- reload installed servers
-  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-end
 
---- Gruvbox theme
-vim.cmd[[
- let g:gruvbox_contrast_dark = 'normal'
- colorscheme gruvbox
- set background=dark
- hi Normal guibg=NONE ctermbg=NONE
-]]

@@ -11,7 +11,7 @@ configuration {
 	xoffset: 0;
 /*	fixed-num-lines: true;*/
 	show-icons: true;
-	terminal: "urxvt";
+	terminal: "st";
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
 /*	run-command: "{cmd}";*/
@@ -91,10 +91,10 @@ configuration {
 /*	kb-delete-entry: "Shift+Delete";*/
 /*	kb-mode-next: "Shift+Right,Control+Tab";*/
 /*	kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";*/
-	kb-row-left: "Control+h";
-	kb-row-right: "Control+l";
-	kb-row-up: "Up,Control+k,ISO_Left_Tab";
-	kb-row-down: "Down,Control+j";
+	kb-row-left: "Alt+h";
+	kb-row-right: "Alt+l";
+	kb-row-up: "Up,Alt+k,ISO_Left_Tab";
+	kb-row-down: "Down,Alt+j";
 /*	kb-row-tab: "Tab";*/
 /*	kb-page-prev: "Page_Up";*/
 /*	kb-page-next: "Page_Down";*/
