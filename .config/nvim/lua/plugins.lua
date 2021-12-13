@@ -31,4 +31,5 @@ return require('packer').startup(function()
 	use 'junegunn/fzf.vim'
 	use 'ojroques/nvim-lspfuzzy'
 	use {'nvim-treesitter/nvim-treesitter'}
+	use 'habamax/vim-godot'
 	end)

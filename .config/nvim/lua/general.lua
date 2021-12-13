@@ -129,10 +129,11 @@ lualine.setup{
 
 
 -- Formating
-vim.g.softtabstop = 4
-vim.g.hiftwidth = 4
-vim.g.abstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4
 vim.cmd('syntax on')
+
 
 -- Latex
 vim.g.tex_flavor = 'latex'
@@ -305,6 +306,8 @@ lspinstall.on_server_ready(function(server)
 	opts.cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
 	opts.root_dir = util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.loop.os_homedir()
     end
+    if server.name == "gdscript" then
+    end
     if server.name == "zls" then
     end
     if server.name == "lua" then
@@ -315,21 +318,4 @@ end)
 
 saga = require('lspsaga')
 saga.init_lsp_saga()
-
---lsp_installer_servers = require('nvim-lsp-installer.servers')
---
---local server_available, requested_server = lsp_installer_servers.get_server("clangd")
---local server_available, requested_server = lsp_installer_servers.get_server("zls")
---if server_available then
---    requested_server:on_ready(function ()
---        local opts = {}
---        requested_server:setup(opts)
---    end)
---    if not requested_server:is_installed() then
---        -- Queue the server to be installed
---        requested_server:install()
---    end
---end
-
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 
