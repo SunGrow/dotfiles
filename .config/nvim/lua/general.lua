@@ -66,7 +66,7 @@ vim.o.ttimeoutlen = 100
 vim.g.gruvbox_contrast_dark = 'normal'
 vim.o.background = 'dark'
 vim.cmd('colorscheme gruvbox')
-vim.g.guifont = 'JetBrains Mono:h10.5'
+vim.g.guifont = 'JetBrains Mono:h11'
 vim.o.linespace = 4
 
 local lsp_colors = require("lsp-colors")
