@@ -30,6 +30,8 @@ return require('packer').startup(function()
 	use {'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end }
 	use 'junegunn/fzf.vim'
 	use 'ojroques/nvim-lspfuzzy'
-	use {'nvim-treesitter/nvim-treesitter'}
+	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 	use 'habamax/vim-godot'
+	-- Rust
+	use 'simrat39/rust-tools.nvim'
 	end)

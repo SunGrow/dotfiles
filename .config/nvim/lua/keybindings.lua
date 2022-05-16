@@ -43,3 +43,4 @@ nmap("<leader>c", "<CMD>:VimtexCompile<CR>")
 nmap("<leader>p", "<CMD>:VimtexView<CR>")
 
 -- LSP
+

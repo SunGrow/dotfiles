@@ -151,7 +151,7 @@ lspfuzzy.setup {}
 
 treesitter = require('nvim-treesitter.configs')
 treesitter.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = { "c", "lua", "rust", "python", "cpp" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
   },
@@ -247,6 +247,7 @@ local LspOnAttach = function(client, bufnr)
   buf_set_keymap('n', '<leader>Wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   
   buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+  buf_set_keymap('n', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", opts)
   buf_set_keymap('n', '<leader>sl', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>", opts)
   buf_set_keymap('n', '<leader>sh', "<cmd>lua vim.lsp.buf.document_highlight()<CR>", opts)
   buf_set_keymap('n', '<leader>lk', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
@@ -317,5 +318,11 @@ lspinstall.on_server_ready(function(server)
 end)
 
 saga = require('lspsaga')
-saga.init_lsp_saga()
+saga.init_lsp_saga {
+	error_sign = 'E!',
+	warn_sign = 'W',
+	hint_sign = 'H',
+	infor_sign = 'in',
+	code_action_icon = 'ca',
+}
 
