@@ -174,6 +174,11 @@ _G.packer_plugins = {
     path = "C:\\Users\\Veom_PC\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
   },
+  ["rust-tools.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\Veom_PC\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\rust-tools.nvim",
+    url = "https://github.com/simrat39/rust-tools.nvim"
+  },
   ["vim-css-color"] = {
     loaded = true,
     path = "C:\\Users\\Veom_PC\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\vim-css-color",

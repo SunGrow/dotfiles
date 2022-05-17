@@ -142,6 +142,9 @@ vim.g.vimtex_view_method = 'zathura'
 -- Diagnostics
 
 lspconfig = require('lspconfig')
+
+-- LSP Rust
+
 lspinstall = require('nvim-lsp-installer')
 
 
@@ -151,7 +154,7 @@ lspfuzzy.setup {}
 
 treesitter = require('nvim-treesitter.configs')
 treesitter.setup {
-  ensure_installed = { "c", "lua", "rust", "python", "cpp" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = { "c", "rust", "python", "cpp" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
   },
@@ -323,6 +326,23 @@ saga.init_lsp_saga {
 	warn_sign = 'W',
 	hint_sign = 'H',
 	infor_sign = 'in',
-	code_action_icon = 'ca',
+	code_action_prompt = {
+		enable = false,
+	},
 }
+local opts = {
+    tools = { -- rust-tools options
+        autoSetHints = true,
+        hover_with_actions = true,
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
+}
+
+require('rust-tools').setup({
+	opts
+})
 
