@@ -27,6 +27,9 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Shift+Return exec $TERMINAL
 
+# start a file manager
+bindsym $mod+i exec thunar
+
 
 # start rofi (a program launcher)
 bindsym $mod+p exec rofi -show drun
@@ -226,7 +229,8 @@ exec --no-startup-id hsetroot -root -cover $(~/.wallpaper/rand.sh .)
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-di xss-lock -- i3lock -n -i $(~/.wallpaper/rand.sh .png) &
+exec --no-startup-id betterlockscreen --fx color -u $(~/.wallpaper/rand.sh .) -w
 
 # Natural scrolling
 exec --no-startup-id xinput set-prop 12 "libinput Natural Scrolling Enabled" 1
@@ -239,4 +243,3 @@ exec setxkbmap -layout us,ru -option 'grp:toggle'
 #exec --no-startup-id xcompmgr &
 exec --no-startup-id picom &
 
-exec --no-startup-di xss-lock -- i3lock -n -i $(~/.wallpaper/rand.sh .png) &
