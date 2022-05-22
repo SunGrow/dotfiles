@@ -7,7 +7,7 @@ super + shift + Return
 	$TERMINAL&!
 
 super + i
-	thunar
+	$FILE&!
 
 # program launcher
 super + p

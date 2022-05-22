@@ -119,12 +119,3 @@ alias du="du -h --max-depth=1 | sort -hr"
 alias free="free -h"
 alias lynx="lynx -vikeys -cfg=$XDG_CONFIG_HOME/lynx/lynx.cfg"
 
-## BIND
-#
-export STEAM_COMPAT_DATA_PATH="~/proton"
-
-export PATH=~/.local/bin:$PATH
-
-# Add rust to path
-export PATH=~/.local/bin:$PATH
-export PATH=~/.cargo/bin:$PATH

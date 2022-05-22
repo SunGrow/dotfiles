@@ -57,7 +57,7 @@ floating_modifier $mod
 bindsym $mod+Shift+Return exec $TERMINAL
 
 # start a file manager
-bindsym $mod+i exec thunar
+bindsym $mod+i exec $FILE
 
 # kill focused window
 bindsym $mod+Shift+q kill

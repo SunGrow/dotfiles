@@ -19,3 +19,13 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
+# Add rust to path
+export PATH=~/.local/bin:$PATH
+export PATH=~/.cargo/bin:$PATH
+
+## BIND
+#
+export STEAM_COMPAT_DATA_PATH="~/proton"
+
+export PATH=~/.local/bin:$PATH
+
