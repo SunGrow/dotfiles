@@ -120,10 +120,10 @@ mode "resize" {
 }
 
 # Take a screenshot with all output and save it into screenshots
-bindsym Print exec scrot ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+bindsym Print exec flameshot full
 
 # Take a Screenshot with the region select
-bindsym $mod+Print exec scrot -s -f ~/screenshots/%Y-%m-%d-%H-%M-%S.png
+bindsym $mod+Print exec flameshot gui
 
 # Take a Screenshot of focused window
 bindsym $mod+Shift+p exec scrot -u ~/screenshots/%Y-%m-%d-%H-%M-%S.png
@@ -243,3 +243,6 @@ exec setxkbmap -layout us,ru -option 'grp:toggle'
 #exec --no-startup-id xcompmgr &
 exec --no-startup-id picom &
 
+for_window [instance="blueman"] floating enable
+for_window [instance="blueman-manager"] floating enable
+for_window [window_role="popup"] floating enable

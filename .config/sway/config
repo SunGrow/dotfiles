@@ -199,6 +199,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 for_window [app_id="galculator"] floating enable
+for_window [app_id="blueman"] floating enable
 
 # Set sway colors
 # class		            border	backgr.	text	indicator	child_border
