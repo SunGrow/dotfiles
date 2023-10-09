@@ -321,7 +321,7 @@ lspinstall.on_server_ready(function(server)
 end)
 
 saga = require('lspsaga')
-saga.init_lsp_saga {
+saga.setup {
 	error_sign = 'E!',
 	warn_sign = 'W',
 	hint_sign = 'H',

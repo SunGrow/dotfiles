@@ -1,5 +1,5 @@
 stow -t ~/.config .config
-stow home
+stow home --adopt
 stow vim
 stow git
 stow wallpaper
