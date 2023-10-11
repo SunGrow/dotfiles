@@ -1,3 +1,5 @@
 [user]
 	email = sungrow@tuta.io
 	name = SunGrow
+[safe]
+	directory = /mnt/e/Projects/RedBot

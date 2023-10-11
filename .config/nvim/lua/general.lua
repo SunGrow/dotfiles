@@ -145,7 +145,8 @@ lspconfig = require('lspconfig')
 
 -- LSP Rust
 
-lspinstall = require('nvim-lsp-installer')
+-- lspinstall = require('nvim-lsp-installer')
+-- lspinstall.setup()
 
 
 lspfuzzy = require('lspfuzzy')
@@ -233,28 +234,28 @@ local LspOnAttach = function(client, bufnr)
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', '<leader>dg', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gd', "<Cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
-  buf_set_keymap('n', '<leader>lr', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+  buf_set_keymap('n', 'gd', "<Cmd>Lspsaga goto_definition<CR>", opts)
+  buf_set_keymap('n', '<A-\'>', "<Cmd>Lspsaga goto_definition<CR>", opts)
+  buf_set_keymap('n', '<leader>lr', "<cmd>Lspsaga rename<CR>", opts)
   buf_set_keymap('n', '<leader>/', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
-  buf_set_keymap('n', 'K', "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-  buf_set_keymap('n', '<C-f>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", opts)
-  buf_set_keymap('n', '<C-b>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", opts)
+  buf_set_keymap('n', 'K', "<Cmd>Lspsaga hover_doc<CR>", opts)
+--  buf_set_keymap('n', '<C-f>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", opts)
+--  buf_set_keymap('n', '<C-b>', "<Cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", opts)
   buf_set_keymap('n', 'gr', "<cmd>LspTroubleToggle lsp_references<cr>", opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
+--  buf_set_keymap('n', '<C-k>', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
   
   buf_set_keymap('n', '<leader>Wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>Wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>Wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   
-  buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
-  buf_set_keymap('n', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", opts)
-  buf_set_keymap('n', '<leader>sl', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>", opts)
+  buf_set_keymap('n', '<leader>.', "<cmd>Lspsaga code_action<CR>", opts)
+--  buf_set_keymap('n', '<leader>sl', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>", opts)
   buf_set_keymap('n', '<leader>sh', "<cmd>lua vim.lsp.buf.document_highlight()<CR>", opts)
-  buf_set_keymap('n', '<leader>lk', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
-  buf_set_keymap('n', '<leader>lj', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>", opts)
+  buf_set_keymap('n', '<leader>lk', "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+  buf_set_keymap('n', '<leader>lj', "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
   buf_set_keymap('n', '<leader>q',  "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
   buf_set_keymap('n', '<leader>xx', "<cmd>LspTroubleToggle<cr>", opts)
@@ -294,7 +295,7 @@ local completion = require('cmp_nvim_lsp')
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities = completion.update_capabilities(capabilities)
+  capabilities = completion.default_capabilities(capabilities)
   return {
     -- enable snippet support
     capabilities = capabilities,
@@ -303,22 +304,6 @@ local function make_config()
 	root_dir = util.root_pattern(".git") or vim.loop.os_homedir()
   }
 end
-
-lspinstall.on_server_ready(function(server)
-    local opts = make_config()
-    if server.name == "clangd" then
-	opts.cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"};
-	opts.root_dir = util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.loop.os_homedir()
-    end
-    if server.name == "gdscript" then
-    end
-    if server.name == "zls" then
-    end
-    if server.name == "lua" then
-      config.settings = lua_settings
-    end
-    server:setup(opts)
-end)
 
 saga = require('lspsaga')
 saga.setup {
@@ -329,6 +314,7 @@ saga.setup {
 	code_action_prompt = {
 		enable = false,
 	},
+
 }
 local opts = {
     tools = { -- rust-tools options
@@ -346,3 +332,10 @@ require('rust-tools').setup({
 	opts
 })
 
+lspconfig.clangd.setup{on_attach=LspOnAttach,
+	cmd = { "clangd", "--background-index", "-j=8", "--header-insertion=never", "--cross-file-rename"},
+	root_dir = util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.loop.os_homedir(),
+	opts = make_config()
+}
+
+---lspconfig.lua.setup{settings=lua_settings, opts = make_config()}
